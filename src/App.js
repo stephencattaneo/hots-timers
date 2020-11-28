@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import React, { Component } from 'react';
+import { Button, Grid, Paper } from '@material-ui/core';
+import Announce from './Announce';
+// import { render } from 'node-sass';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {alert: null};
+  }
+
+  handleButtonClick = () => {
+    setTimeout(this.announceTimeoutComplete, 2 * 1000);
+  }
+
+  announceTimeoutComplete = () => {
+    this.setState({alert: 'foo bar'});
+  }
+
+  clearAlert = () => {
+    this.setState({alert: null});
+  }
+
+  render() {
+    let dialog;
+     if (this.state.alert) {
+      dialog = <Announce name={this.state.alert} onClose={this.clearAlert} />
+     }
+
+    return (
+      <div className="App">
+        {dialog}
+        <Grid
+          container
+          direction="row"
+          justify="space-evenly"
+          alignItems="flex-start"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+          <Paper elevation={3}>
+            <Button color="primary" onClick={this.handleButtonClick}>Start Timer</Button>
+          </Paper>
+        </Grid>
 
-export default App;
+      </div>
+    );
+  }
+}
